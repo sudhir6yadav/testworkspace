@@ -36,13 +36,13 @@ public class MainActivityPresenter implements MainActivityPresenterInterface{
         return new DisposableObserver<MatrimonialModel>() {
 
             @Override
-            public void onNext(@NonNull MatrimonialModel matrimonialModel) {
+            public void onNext(MatrimonialModel matrimonialModel) {
                 Log.d(TAG,"detail OnNext"+matrimonialModel.getResults().get(0).getEmail());
                 mainActivityViewInterface.showgetMatrimonialDetails(matrimonialModel);
             }
 
             @Override
-            public void onError(@NonNull Throwable e) {
+            public void onError(Throwable e) {
                 Log.d(TAG,"Error "+e);
                 e.printStackTrace();
                 mainActivityViewInterface.displayErrMsg("Error fetching Matrimonial Data");

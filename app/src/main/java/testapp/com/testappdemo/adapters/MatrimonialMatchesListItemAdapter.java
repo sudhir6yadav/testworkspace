@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import java.util.List;
 
+import butterknife.BindView;
 import testapp.com.testappdemo.R;
 import testapp.com.testappdemo.models.Result;
 
@@ -34,14 +35,24 @@ public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<Matr
     }
 
     @Override
-    public void onBindViewHolder(MatrimonialHolder holder, int position) {
+    public void onBindViewHolder(MatrimonialHolder holder, final int position) {
 
         Log.d(TAG, "onBindViewHolder: "+matrimonialMatchesList.get(position).getName().getTitle());
-        holder.tvTitle.setText(matrimonialMatchesList.get(position).getName().getTitle()+". "+matrimonialMatchesList.get(position).getName().getFirst()+" "+matrimonialMatchesList.get(position).getName().getLast());
-        holder.tvOverview.setText(matrimonialMatchesList.get(position).getEmail());
-        holder.tvReleaseDate.setText(matrimonialMatchesList.get(position).getPhone());
-        Glide.with(context).load(matrimonialMatchesList.get(position).getPicture().getMedium()).into(holder.ivMovie);
+        holder.tvName.setText(matrimonialMatchesList.get(position).getName().getTitle()+". "+matrimonialMatchesList.get(position).getName().getFirst()+" "+matrimonialMatchesList.get(position).getName().getLast());
+        holder.emailID.setText(matrimonialMatchesList.get(position).getEmail());
+        holder.tvPhoneNo.setText(matrimonialMatchesList.get(position).getPhone());
+        Glide.with(context).load(matrimonialMatchesList.get(position).getPicture().getMedium()).into(holder.ivPicture);
 
+        holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                matrimonialMatchesList.remove(position);  // remove the item from list
+               //
+                // notifyItemRemoved(position);
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -51,15 +62,30 @@ public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<Matr
 
     public class MatrimonialHolder extends RecyclerView.ViewHolder {
 
-        TextView tvTitle,tvOverview,tvReleaseDate;
-        ImageView ivMovie;
+       // @BindView(R.id.tvName)
+        TextView tvName;
+
+       // @BindView(R.id.emailID)
+        TextView emailID;
+
+        //@BindView(R.id.tvPhoneNo)
+        TextView tvPhoneNo;
+
+      //  @BindView(R.id.ivPicture)
+        ImageView ivPicture;
+
+        //  @BindView(R.id.ivPicture)
+        ImageView ivDelete;
+
+
 
         public MatrimonialHolder(View v) {
             super(v);
-            tvTitle =  v.findViewById(R.id.tvTitle);
-            tvOverview = v.findViewById(R.id.tvOverView);
-            tvReleaseDate = v.findViewById(R.id.tvReleaseDate);
-            ivMovie = v.findViewById(R.id.ivMovie);
+            tvName =  v.findViewById(R.id.tvName);
+            emailID = v.findViewById(R.id.emailID);
+            tvPhoneNo = v.findViewById(R.id.tvPhoneNo);
+             ivPicture = v.findViewById(R.id.ivPicture);
+            ivDelete = v.findViewById(R.id.ivDelete);
         }
     }
 }

@@ -36,9 +36,9 @@ public class MainActivityPresenter implements MainActivityPresenterInterface{
         return new DisposableObserver<MatrimonialModel>() {
 
             @Override
-            public void onNext(@NonNull MatrimonialModel movieResponse) {
-                Log.d(TAG,"detail OnNext"+movieResponse.getResults().get(0).getEmail());
-                mainActivityViewInterface.showgetMatrimonialDetails(movieResponse);
+            public void onNext(@NonNull MatrimonialModel matrimonialModel) {
+                Log.d(TAG,"detail OnNext"+matrimonialModel.getResults().get(0).getEmail());
+                mainActivityViewInterface.showgetMatrimonialDetails(matrimonialModel);
             }
 
             @Override

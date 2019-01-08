@@ -1,13 +1,14 @@
 package testapp.com.testappdemo.ui;
 
-import testapp.com.testappdemo.models.MatrimonialModel;
+import java.util.List;
+
+import testapp.com.testappdemo.models.MaterimonialDetailModel;
 
 public interface MainActivityViewInterface {
 
-    void showToast(String s);
     void showProgressBar();
     void hideProgressBar();
-    void showgetMatrimonialDetails(MatrimonialModel matrimonialModel);
-    void displayErrMsg(String msg);
+    void showgetMatrimonialDetails(List<MaterimonialDetailModel> matrimonialModel);
+    void showToastMsg(String msg);
 
 }

@@ -2,15 +2,20 @@ package testapp.com.testappdemo.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import testapp.com.testappdemo.models.MaterimonialDetailModel;
 
 public class DbHelper extends SQLiteOpenHelper{
 
     private static final String TAG = "DbMatrimonial";
-    
+
     // Database Version
     private static final int DATABASE_VERSION = 1;
 
@@ -62,7 +67,6 @@ public class DbHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-
         db.execSQL(DROP_MATRIMONIAL_TABLE);
         onCreate(db);
     }
@@ -75,5 +79,83 @@ public class DbHelper extends SQLiteOpenHelper{
         return dbInstance;
     }
 
+    public void addDetail(List<MaterimonialDetailModel> materimonialDetailModels) {
 
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+
+        for(int i=0;i<materimonialDetailModels.size();i++) {
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_FIRST_NAME, materimonialDetailModels.get(i).getFirstname());
+            values.put(COLUMN_LAST_NAME, materimonialDetailModels.get(i).getLastname());
+            values.put(COLUMN_MIDDLE_NAME, materimonialDetailModels.get(i).getMiddlename());
+            values.put(COLUMN_GENDER, materimonialDetailModels.get(i).getGender());
+            values.put(COLUMN_EMAIL_ID, materimonialDetailModels.get(i).getEmail());
+            values.put(COLUMN_AGE, materimonialDetailModels.get(i).getAge());
+            values.put(COLUMN_PHONE_NO, materimonialDetailModels.get(i).getPhoneno());
+            values.put(COLUMN_CELL_NO, materimonialDetailModels.get(i).getCellno());
+            values.put(COLUMN_PICTURE, materimonialDetailModels.get(i).getPicture());
+            values.put(COLUMN_CITY, materimonialDetailModels.get(i).getCity());
+            values.put(COLUMN_STATE, materimonialDetailModels.get(i).getState());
+            values.put(COLUMN_STREET, materimonialDetailModels.get(i).getStreet());
+
+
+            // Inserting Row
+            long insertResult = db.insert(TABLE_MATRIMONIAL, null, values);
+            Log.d(TAG, "addAlbum: insertResult = " + insertResult);
+
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+
+    }
+
+    public List<MaterimonialDetailModel> showDetails() {
+
+
+        String sql = "select * from "+TABLE_MATRIMONIAL;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        cursor.moveToFirst();
+        List<MaterimonialDetailModel> materimonialDetailModels=new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+
+                MaterimonialDetailModel materimonialDetailModel=new MaterimonialDetailModel();
+                materimonialDetailModel.setFirstname(cursor.getString(cursor.getColumnIndex(COLUMN_FIRST_NAME)));
+                materimonialDetailModel.setMiddlename(cursor.getString(cursor.getColumnIndex(COLUMN_MIDDLE_NAME)));
+                materimonialDetailModel.setLastname(cursor.getString(cursor.getColumnIndex(COLUMN_LAST_NAME)));
+                materimonialDetailModel.setAge(cursor.getString(cursor.getColumnIndex(COLUMN_AGE)));
+                materimonialDetailModel.setCellno(cursor.getString(cursor.getColumnIndex(COLUMN_CELL_NO)));
+                materimonialDetailModel.setPhoneno(cursor.getString(cursor.getColumnIndex(COLUMN_PHONE_NO)));
+                materimonialDetailModel.setCity(cursor.getString(cursor.getColumnIndex(COLUMN_CITY)));
+                materimonialDetailModel.setState(cursor.getString(cursor.getColumnIndex(COLUMN_STATE)));
+                materimonialDetailModel.setEmail(cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL_ID)));
+                materimonialDetailModel.setStreet(cursor.getString(cursor.getColumnIndex(COLUMN_STREET)));
+                materimonialDetailModel.setGender(cursor.getString(cursor.getColumnIndex(COLUMN_GENDER)));
+                materimonialDetailModel.setPicture(cursor.getString(cursor.getColumnIndex(COLUMN_PICTURE)));
+                materimonialDetailModels.add(materimonialDetailModel);
+
+            }while (cursor.moveToNext());
+
+            cursor.close();
+            return materimonialDetailModels;
+
+        }
+        cursor.close();
+        return null;
+
+    }
+
+    ///delete all data
+    public void deleteAllDetails()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete  from " + TABLE_MATRIMONIAL);
+        db.close();
+    }
 }

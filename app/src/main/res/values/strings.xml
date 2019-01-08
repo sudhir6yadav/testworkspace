@@ -8,4 +8,5 @@
     <string name="state">State</string>
     <string name="age">Age</string>
     <string name="cell_no">Cell No</string>
+    <string name="gender">Gender</string>
 </resources>

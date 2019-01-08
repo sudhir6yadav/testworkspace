@@ -19,17 +19,18 @@ import java.util.List;
 
 import butterknife.BindView;
 import testapp.com.testappdemo.R;
+import testapp.com.testappdemo.models.MaterimonialDetailModel;
 import testapp.com.testappdemo.models.Result;
 
 
 public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<MatrimonialMatchesListItemAdapter.MatrimonialHolder> {
 
-    List<Result> matrimonialMatchesList;
+    List<MaterimonialDetailModel> matrimonialMatchesList;
     Context context;
     private String TAG=MatrimonialMatchesListItemAdapter.class.getName();
     private static int currentPosition = 0;
 
-    public MatrimonialMatchesListItemAdapter(List<Result> matrimonialMatchesList, Context context) {
+    public MatrimonialMatchesListItemAdapter(List<MaterimonialDetailModel> matrimonialMatchesList, Context context) {
         this.matrimonialMatchesList = matrimonialMatchesList;
         this.context = context;
     }
@@ -44,16 +45,17 @@ public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<Matr
     @Override
     public void onBindViewHolder(final MatrimonialHolder holder, final int position) {
 
-        Log.d(TAG, "onBindViewHolder: "+matrimonialMatchesList.get(position).getName().getTitle());
-        holder.tvName.setText(matrimonialMatchesList.get(position).getName().getTitle()+". "+matrimonialMatchesList.get(position).getName().getFirst()+" "+matrimonialMatchesList.get(position).getName().getLast());
+        Log.d(TAG, "onBindViewHolder: "+matrimonialMatchesList.get(position).getEmail());
+        holder.tvName.setText(matrimonialMatchesList.get(position).getFirstname()+". "+matrimonialMatchesList.get(position).getMiddlename()+" "+matrimonialMatchesList.get(position).getLastname());
         holder.emailID.setText(matrimonialMatchesList.get(position).getEmail());
-        holder.tvPhoneNo.setText(matrimonialMatchesList.get(position).getPhone());
-        holder.tvState.setText(matrimonialMatchesList.get(position).getLocation().getState());
-        holder.tvStreet.setText(matrimonialMatchesList.get(position).getLocation().getStreet());
-        holder.tvCity.setText(matrimonialMatchesList.get(position).getLocation().getCity());
-        holder.tvCellNo.setText(matrimonialMatchesList.get(position).getCell());
-        holder.tvAge.setText(matrimonialMatchesList.get(position).getDob().getAge());
-        Glide.with(context).load(matrimonialMatchesList.get(position).getPicture().getLarge()).into(holder.ivPicture);
+        holder.tvPhoneNo.setText(matrimonialMatchesList.get(position).getPhoneno());
+        holder.tvState.setText(matrimonialMatchesList.get(position).getState());
+        holder.tvStreet.setText(matrimonialMatchesList.get(position).getStreet());
+        holder.tvCity.setText(matrimonialMatchesList.get(position).getCity());
+        holder.tvCellNo.setText(matrimonialMatchesList.get(position).getCellno());
+        holder.tvAge.setText(matrimonialMatchesList.get(position).getAge());
+        holder.tvGender.setText(matrimonialMatchesList.get(position).getGender());
+        Glide.with(context).load(matrimonialMatchesList.get(position).getPicture()).into(holder.ivPicture);
 
         //if the position is equals to the item position which is to be expanded
         if (currentPosition == position) {
@@ -74,6 +76,7 @@ public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<Matr
             holder.llExpandView.setVisibility(View.GONE);
             holder.ivExpandLessMore.setImageResource(R.drawable.ic_expand_less_black_24dp);
         }
+
         holder.ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +133,7 @@ public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<Matr
         TextView tvState;
         TextView tvAge;
         TextView tvCellNo;
+        TextView tvGender;
         TextView emailID;
         TextView tvPhoneNo;
         ImageView ivPicture;
@@ -140,17 +144,18 @@ public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<Matr
 
         public MatrimonialHolder(View v) {
             super(v);
-            tvName =  v.findViewById(R.id.tvName);
-            tvStreet =  v.findViewById(R.id.tvStreet);
-            tvCity =  v.findViewById(R.id.tvCity);
-            tvState =  v.findViewById(R.id.tvState);
-            tvAge =  v.findViewById(R.id.tvAge);
-            tvCellNo =  v.findViewById(R.id.tvCellNo);
-            emailID = v.findViewById(R.id.emailID);
-            tvPhoneNo = v.findViewById(R.id.tvPhoneNo);
-            ivPicture = v.findViewById(R.id.ivPicture);
-            ivDelete = v.findViewById(R.id.ivDelete);
-            cvItemView = v.findViewById(R.id.cvItemView);
+            tvName           =  v.findViewById(R.id.tvName);
+            tvStreet         =  v.findViewById(R.id.tvStreet);
+            tvCity           =  v.findViewById(R.id.tvCity);
+            tvState          =  v.findViewById(R.id.tvState);
+            tvAge            =  v.findViewById(R.id.tvAge);
+            tvCellNo         =  v.findViewById(R.id.tvCellNo);
+            tvGender         =  v.findViewById(R.id.tvGender);
+            emailID          = v.findViewById(R.id.emailID);
+            tvPhoneNo        = v.findViewById(R.id.tvPhoneNo);
+            ivPicture        = v.findViewById(R.id.ivPicture);
+            ivDelete         = v.findViewById(R.id.ivDelete);
+            cvItemView       = v.findViewById(R.id.cvItemView);
             ivExpandLessMore = v.findViewById(R.id.ivExpandLessMore);
             llExpandView     = v.findViewById(R.id.llExpandView);
         }

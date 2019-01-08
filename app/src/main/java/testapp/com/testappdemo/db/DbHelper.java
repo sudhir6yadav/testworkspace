@@ -72,6 +72,7 @@ public class DbHelper extends SQLiteOpenHelper{
     }
 
 
+    ////instance of database
     static public synchronized DbHelper getDbInstance(Context context) {
         if (dbInstance == null) {
             dbInstance = new DbHelper(context);
@@ -79,6 +80,8 @@ public class DbHelper extends SQLiteOpenHelper{
         return dbInstance;
     }
 
+
+    ///insert detail into db
     public void addDetail(List<MaterimonialDetailModel> materimonialDetailModels) {
 
 
@@ -103,7 +106,6 @@ public class DbHelper extends SQLiteOpenHelper{
 
             // Inserting Row
             long insertResult = db.insert(TABLE_MATRIMONIAL, null, values);
-            Log.d(TAG, "addAlbum: insertResult = " + insertResult);
 
         }
         db.setTransactionSuccessful();
@@ -112,6 +114,8 @@ public class DbHelper extends SQLiteOpenHelper{
 
     }
 
+
+    ////fetch all list
     public List<MaterimonialDetailModel> showDetails() {
 
 

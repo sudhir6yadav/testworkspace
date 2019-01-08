@@ -1,28 +1,22 @@
 package testapp.com.testappdemo.ui;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import testapp.com.testappdemo.R;
 import testapp.com.testappdemo.adapters.MatrimonialMatchesListItemAdapter;
 import testapp.com.testappdemo.db.DbHelper;
 import testapp.com.testappdemo.models.MaterimonialDetailModel;
-import testapp.com.testappdemo.models.MatrimonialModel;
 
 public class MainActivity extends AppCompatActivity implements MainActivityViewInterface{
 
@@ -58,8 +52,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityViewI
 
         initViews();
 
+
+        ///initialize presenter
         mainActivityPresenter = new MainActivityPresenter(this,this);
 
+        ////get data from database if available
         mainActivityPresenter.saveDataToDb(DbHelper.getDbInstance(this).showDetails());
 
     }
@@ -67,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityViewI
     private void initViews() {
 
 
+        /////lazy loading
         rvList.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
@@ -95,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityViewI
 
     @Override
     public void showProgressBar() {
+        tvInternetConnection.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         rlProgressBar.setVisibility(View.VISIBLE);
 
@@ -111,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityViewI
 
         if(matrimonialModel!=null) {
             materimonialDetailModels.addAll(matrimonialModel);
-            Log.d(TAG,matrimonialModel.get(0).getEmail());
 
             if(adapter != null)
             {
@@ -119,11 +117,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityViewI
                 adapter.notifyDataSetChanged();
             }
             else {
+
+                //initialize adapter
                 adapter = new MatrimonialMatchesListItemAdapter(materimonialDetailModels, MainActivity.this);
                 rvList.setAdapter(adapter);
                 linearLayoutManager = new LinearLayoutManager(MainActivity.this);
                 rvList.setLayoutManager(linearLayoutManager);
-
             }
         }
         else
@@ -134,7 +133,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityViewI
 
     @Override
     public void showToastMsg(String msg) {
+        isLoading=false;
+        rlProgressBar.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
+        tvInternetConnection.setVisibility(View.VISIBLE);
         tvInternetConnection.setText(msg);
     }
 }

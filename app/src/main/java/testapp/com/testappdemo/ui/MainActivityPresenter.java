@@ -32,6 +32,7 @@ public class MainActivityPresenter implements MainActivityPresenterInterface{
     @Override
     public void getMatrimonialDetails() {
 
+        ///check internet connectivity
         if(InternetConnection.checkConnection(context)) {
             mainActivityViewInterface.showProgressBar();
             getObservable().subscribeWith(getObserver());
@@ -49,6 +50,7 @@ public class MainActivityPresenter implements MainActivityPresenterInterface{
 
     }
 
+    //call api default param valuew is 10
     public Observable<MatrimonialModel> getObservable(){
         return RetrofitInstance.getRetrofit().create(ApiInterfaces.class)
                 .getMatrimonialMatches("10")
@@ -83,6 +85,8 @@ public class MainActivityPresenter implements MainActivityPresenterInterface{
                 }
 
                 saveDataToDb(materimonialDetailModels);
+
+                ///save data to db
                 DbHelper.getDbInstance(context).addDetail(materimonialDetailModels);
             }
 

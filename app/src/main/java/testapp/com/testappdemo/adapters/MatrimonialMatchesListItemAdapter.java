@@ -1,7 +1,6 @@
 package testapp.com.testappdemo.adapters;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,17 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import java.util.List;
-
-import butterknife.BindView;
 import testapp.com.testappdemo.R;
 import testapp.com.testappdemo.models.MaterimonialDetailModel;
-import testapp.com.testappdemo.models.Result;
 
 
 public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<MatrimonialMatchesListItemAdapter.MatrimonialHolder> {
@@ -83,30 +78,15 @@ public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<Matr
 
                 matrimonialMatchesList.remove(position);  // remove the item from list
 
-                Animation rotation = AnimationUtils.loadAnimation(context, R.anim.anim_slide_out_right);
-                rotation.setFillAfter(true);
-                rotation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
+                ///animation fom left to right
 
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        notifyDataSetChanged();
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                holder.cvItemView.startAnimation(rotation);
+                holder.cvItemView.startAnimation(animationEffect());
             }
+
+
         });
 
-        //
+        ////expand img listener
         holder.ivExpandLessMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +98,32 @@ public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<Matr
                 notifyDataSetChanged();
             }
         });
+    }
+
+
+    ///animation effect
+    private Animation animationEffect() {
+
+        Animation rotation = AnimationUtils.loadAnimation(context, R.anim.anim_slide_out_right);
+        rotation.setFillAfter(true);
+        rotation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        return rotation;
     }
 
     @Override

@@ -1,12 +1,18 @@
 package testapp.com.testappdemo.adapters;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import java.util.List;
@@ -21,6 +27,7 @@ public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<Matr
     List<Result> matrimonialMatchesList;
     Context context;
     private String TAG=MatrimonialMatchesListItemAdapter.class.getName();
+    private static int currentPosition = 0;
 
     public MatrimonialMatchesListItemAdapter(List<Result> matrimonialMatchesList, Context context) {
         this.matrimonialMatchesList = matrimonialMatchesList;
@@ -35,21 +42,76 @@ public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<Matr
     }
 
     @Override
-    public void onBindViewHolder(MatrimonialHolder holder, final int position) {
+    public void onBindViewHolder(final MatrimonialHolder holder, final int position) {
 
         Log.d(TAG, "onBindViewHolder: "+matrimonialMatchesList.get(position).getName().getTitle());
         holder.tvName.setText(matrimonialMatchesList.get(position).getName().getTitle()+". "+matrimonialMatchesList.get(position).getName().getFirst()+" "+matrimonialMatchesList.get(position).getName().getLast());
         holder.emailID.setText(matrimonialMatchesList.get(position).getEmail());
         holder.tvPhoneNo.setText(matrimonialMatchesList.get(position).getPhone());
-        Glide.with(context).load(matrimonialMatchesList.get(position).getPicture().getMedium()).into(holder.ivPicture);
+        holder.tvState.setText(matrimonialMatchesList.get(position).getLocation().getState());
+        holder.tvStreet.setText(matrimonialMatchesList.get(position).getLocation().getStreet());
+        holder.tvCity.setText(matrimonialMatchesList.get(position).getLocation().getCity());
+        holder.tvCellNo.setText(matrimonialMatchesList.get(position).getCell());
+        holder.tvAge.setText(matrimonialMatchesList.get(position).getDob().getAge());
+        Glide.with(context).load(matrimonialMatchesList.get(position).getPicture().getLarge()).into(holder.ivPicture);
 
+        //if the position is equals to the item position which is to be expanded
+        if (currentPosition == position) {
+            //creating an animation
+            Animation slideDown = AnimationUtils.loadAnimation(context, R.anim.anim_slide_down);
+
+            //toggling visibility
+            holder.llExpandView.setVisibility(View.VISIBLE);
+
+            //adding sliding effect
+            holder.llExpandView.startAnimation(slideDown);
+
+            holder.ivExpandLessMore.setImageResource(R.drawable.ic_expand_more_black_24dp);
+        }
+        else
+        {
+            //toggling visibility
+            holder.llExpandView.setVisibility(View.GONE);
+            holder.ivExpandLessMore.setImageResource(R.drawable.ic_expand_less_black_24dp);
+        }
         holder.ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 matrimonialMatchesList.remove(position);  // remove the item from list
-               //
-                // notifyItemRemoved(position);
+
+                Animation rotation = AnimationUtils.loadAnimation(context, R.anim.anim_slide_out_right);
+                rotation.setFillAfter(true);
+                rotation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                holder.cvItemView.startAnimation(rotation);
+            }
+        });
+
+        //
+        holder.ivExpandLessMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //getting the position of the item to expand it
+                currentPosition = position;
+
+                //reloding the list
                 notifyDataSetChanged();
             }
         });
@@ -62,30 +124,35 @@ public class MatrimonialMatchesListItemAdapter extends RecyclerView.Adapter<Matr
 
     public class MatrimonialHolder extends RecyclerView.ViewHolder {
 
-       // @BindView(R.id.tvName)
         TextView tvName;
-
-       // @BindView(R.id.emailID)
+        TextView tvStreet;
+        TextView tvCity;
+        TextView tvState;
+        TextView tvAge;
+        TextView tvCellNo;
         TextView emailID;
-
-        //@BindView(R.id.tvPhoneNo)
         TextView tvPhoneNo;
-
-      //  @BindView(R.id.ivPicture)
         ImageView ivPicture;
-
-        //  @BindView(R.id.ivPicture)
         ImageView ivDelete;
-
-
+        ImageView ivExpandLessMore;
+        CardView cvItemView;
+        LinearLayout llExpandView;
 
         public MatrimonialHolder(View v) {
             super(v);
             tvName =  v.findViewById(R.id.tvName);
+            tvStreet =  v.findViewById(R.id.tvStreet);
+            tvCity =  v.findViewById(R.id.tvCity);
+            tvState =  v.findViewById(R.id.tvState);
+            tvAge =  v.findViewById(R.id.tvAge);
+            tvCellNo =  v.findViewById(R.id.tvCellNo);
             emailID = v.findViewById(R.id.emailID);
             tvPhoneNo = v.findViewById(R.id.tvPhoneNo);
-             ivPicture = v.findViewById(R.id.ivPicture);
+            ivPicture = v.findViewById(R.id.ivPicture);
             ivDelete = v.findViewById(R.id.ivDelete);
+            cvItemView = v.findViewById(R.id.cvItemView);
+            ivExpandLessMore = v.findViewById(R.id.ivExpandLessMore);
+            llExpandView     = v.findViewById(R.id.llExpandView);
         }
     }
 }

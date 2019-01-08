@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">TestAppDemo</string>
+    <string name="app_name">Test App</string>
 
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+
     <string name="street">Street</string>
     <string name="city">City</string>
     <string name="state">State</string>
